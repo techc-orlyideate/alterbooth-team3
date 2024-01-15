@@ -29,10 +29,11 @@ if(isset($_POST["login"])) {
         // ユーザーが存在し、パスワードが一致するかどうかを確認します
         if($user && password_verify($password, $user["password"])) {
             // ユーザー名をセッションに保存します
+            $_SESSION["id"] = $user["id"];
             $_SESSION["employee_mail"] = $user["employee_mail"];
             $_SESSION["employee_name"] = $user["employee_name"];
             // ログイン成功ページにリダイレクトします
-            header("Location: http://localhost/alterbooth-team3/login_system/view/success.php");
+            header("Location: http://localhost/alterbooth-team3/fullcalendar.php");
             exit;
         } else {
             // ログイン失敗ページにリダイレクトします
