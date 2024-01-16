@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar/index.global.min.js'></script>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.0/locales-all.min.js'></script>
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const calendarEl = document.getElementById('calendar')
+			const calendar = new FullCalendar.Calendar(calendarEl, {
+				headerToolbar: {
+					left: 'prev, next today',
+					center: 'title',
+					right: 'dayGridMonth,timeGridWeek,timeGridDay'
+				},
+				initialView: 'dayGridMonth',
+				locale: "ja",
+				editable: true,
+				dateClick: function(info) {
+					// カレンダーがクリックされたときの処理
+					const title = prompt('イベントのタイトルを入力してください:')
+					if (title){
+						const newEvent = {
+							title: title,
+							start: info.dateStr,
+							allDay: true
+						}
+						calendar.addEvent(newEvent)
+
+						// phpにPOSTリクエスト
+						fetch('../../database/query.php', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(newEvent) // JSONに変換
+						})
+					}
+				},
+				eventResize: function(info) {
+					// イベントの時間が調整されたときの処理
+				},
+				eventDrop: function(info) {
+					// イベントがドラッグ&ドロップされたときの処理
+				}
+			})
+			calendar.render()
+		})
+	</script>
+	<title>FullCalendarカレンダー</title>
+</head>
+<body>
+	<h1>FullCalendarカレンダー</h1>
+	<div id='calendar'></div>
+
+</body>
+</html>
