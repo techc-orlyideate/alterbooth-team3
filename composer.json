@@ -1,5 +1,13 @@
 {
     "require": {
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^5.6",
+        "fullcalendar/fullcalendar": "^3.10"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "robloach/component-installer": true,
+            "oomphinc/composer-installers-extender": true
+        }
     }
 }
