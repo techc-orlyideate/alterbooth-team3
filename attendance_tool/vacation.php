@@ -1,10 +1,13 @@
 <?php
-// DB接続などの共通処理を含むconfig.phpを作成することが一般的です。
+// 自動でライブラリ読み込み
+require './vendor/autoload.php';
 
-// 仮のDB接続情報
-$host = 'localhost';
-$db = 'attendance_tool';
-$user = 'root';
+// .envを使用する
+Dotenv\Dotenv::createImmutable(__DIR__)->load();
+
+$host = $_ENV["HOST"];
+$db = $_ENV["DB"]; // データベース名を指定
+$user = $_ENV["USER"];
 $pass = '';
 
 try {

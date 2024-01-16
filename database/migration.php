@@ -1,6 +1,6 @@
 <?php
 
-// 自動で読み込み
+// 自動でライブラリ読み込み
 require './vendor/autoload.php';
 
 // .envを使用する
