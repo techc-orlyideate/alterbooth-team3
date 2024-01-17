@@ -45,9 +45,49 @@
 				},
 				eventResize: function(info) {
 					// イベントの時間が調整されたときの処理
+					const eventId = info.event.id
+					const start = toJST(info.event.start)
+					const end = info.event.end ? toJST(info.event.end) : null
+
+					// POSTリクエスト
+					fetch('../../database/updateEvent.php', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ id: eventId, start: start, end: end })
+					})
 				},
 				eventDrop: function(info) {
 					// イベントがドラッグ&ドロップされたときの処理
+					const eventId = info.event.id
+					const start = toJST(info.event.start)
+					const end = info.event.end ? toJST(info.event.end) : null
+
+					// POSTリクエスト
+					fetch('../../database/updateEvent.php', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ id: eventId, start: start, end: end })
+					})
+				},
+				eventClick: function(info) {
+					// 削除の確認
+					if (confirm('このイベントを削除しますか？')) {
+						// イベントの削除
+						info.event.remove()
+
+						// サーバーにPOSTリクエストを送信
+						fetch('../../database/deleteEvent.php', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ id: info.event.id }) // イベントIDを送信
+						})
+					}
 				},
 				events: '../../database/disCalen.php'
 			})
@@ -79,9 +119,22 @@
 					// モーダルを閉じる
 					const modal = bootstrap.Modal.getInstance(document.getElementById('eventModal'))
 					modal.hide()
+
+					// ページを更新する
+					location.reload()
 				}
 			})
-		});
+		})
+
+		// 日付と時間をJSTに変換
+		function toJST(date) {
+			const year = date.getFullYear()
+			const month = ("00" + (date.getMonth() + 1)).slice(-2)
+			const day = ("00" + date.getDate()).slice(-2)
+			const hour = ("00" + date.getHours()).slice(-2)
+			const minute = ("00" + date.getMinutes()).slice(-2)
+			return `${year}-${month}-${day}T${hour}:${minute}`
+		}
 	</script>
 	<title>FullCalendarカレンダー</title>
 </head>

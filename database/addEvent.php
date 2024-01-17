@@ -12,5 +12,5 @@ $end = $data['end'];
 
 // DBにイベントデータを保存
 $query = "INSERT INTO events (user_id, title, start, end) VALUES ('$user_id', '$title', '$start', '$end');";
-executeQuery($query)
+executeQuery($query);
 ?>
