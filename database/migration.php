@@ -7,16 +7,26 @@ require '../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
 $dotenv->load();
 
-
 $host = $_ENV["HOST"];
 $db = $_ENV["DB"];
 $user = $_ENV["USER"];
 $pass = '';
 
 try {
+    // データベースに接続
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    // データベースが存在しない場合、新たに作成
+    if ($e->getCode() == 1049) {
+        $pdo = new PDO("mysql:host=$host;", $user, $pass);
+        $pdo->exec("CREATE DATABASE `$db`;USE `$db`;");
+    } else {
+        die("Error: " . $e->getMessage());
+    }
+}
 
+try {
     // usersテーブルの作成
     $pdo->exec('
         CREATE TABLE IF NOT EXISTS users (
@@ -26,47 +36,6 @@ try {
             email VARCHAR(255) NOT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )
-    ');
-
-    // projectsテーブルの作成
-    $pdo->exec('
-        CREATE TABLE IF NOT EXISTS projects (
-            project_id INT AUTO_INCREMENT PRIMARY KEY,
-            project_name VARCHAR(255) NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-        )
-    ');
-
-    // timecardsテーブルの作成
-    $pdo->exec('
-        CREATE TABLE IF NOT EXISTS timecards (
-            timecard_id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT,
-            project_id INT,
-            date DATE,
-            start_time TIME,
-            end_time TIME,
-            description TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users (user_id),
-            FOREIGN KEY (project_id) REFERENCES projects (project_id)
-        )
-    ');
-
-    // vacationsテーブルの作成
-    $pdo->exec('
-        CREATE TABLE IF NOT EXISTS vacations (
-            vacation_id INT AUTO_INCREMENT PRIMARY KEY,
-            user_id INT,
-            vacation_type VARCHAR(255) NOT NULL,
-            start_date DATE,
-            end_date DATE,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            FOREIGN KEY (user_id) REFERENCES users (user_id)
         )
     ');
 
@@ -84,6 +53,12 @@ try {
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )
     ');
+
+    // rootユーザーのレコードを挿入
+    $pdo->exec("
+        INSERT INTO users (username, password, email)
+        VALUES ('root', 'root', 'root')
+    ");
 
     echo "テーブルが作成されました。\n";
 } catch (PDOException $e) {
