@@ -76,6 +76,7 @@ try {
             event_id INT AUTO_INCREMENT PRIMARY KEY,
             user_id INT,
             FOREIGN KEY (user_id) REFERENCES users (user_id),
+            store_id INT,
             title VARCHAR(255) NOT NULL,
             start DATETIME NOT NULL,
             end DATETIME,
