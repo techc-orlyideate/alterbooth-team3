@@ -33,7 +33,7 @@ if(isset($_POST["login"])) {
             $_SESSION["employee_mail"] = $user["employee_mail"];
             $_SESSION["employee_name"] = $user["employee_name"];
             // ログイン成功ページにリダイレクトします
-            header("Location: http://localhost/alterbooth-team3/fullcalendar.php");
+            header("Location: http://localhost/alterbooth-team3/attendance_tool/calendar/fullcalendar.html");
             exit;
         } else {
             // ログイン失敗ページにリダイレクトします
