@@ -23,7 +23,7 @@ $opt = [
 $pdo = new PDO($dsn, $user, $pass, $opt);
 
 // usersテーブルからusernameを取得
-$sql = "SELECT username FROM users";
+$sql = "SELECT username FROM users WHERE username != 'root'";
 $stmt = $pdo->query($sql);
 $usernames = $stmt->fetchAll(PDO::FETCH_COLUMN);
 ?>
@@ -48,6 +48,7 @@ $usernames = $stmt->fetchAll(PDO::FETCH_COLUMN);
 				},
 				initialView: 'dayGridMonth',
 				locale: "ja",
+                events: '../../database/disShift.php',
 				editable: true,
                 droppable: true, // 外部イベントのドロップを許可
                 drop: function(info) {
@@ -60,7 +61,17 @@ $usernames = $stmt->fetchAll(PDO::FETCH_COLUMN);
 					const hour = ("00" + date.getHours()).slice(-2)
 					const minute = ("00" + date.getMinutes()).slice(-2)
 					const dateTime = `${year}-${month}-${day}T${hour}:${minute}`
-                    alert(dateTime)
+
+                    // POSTリクエスト
+                    fetch('../../database/addShift.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ title: title, start: dateTime})
+                    })
+
+                    location.reload()
                 },
 				eventResize: function(info) {
 					// イベントの時間が調整されたときの処理
@@ -118,6 +129,16 @@ $usernames = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 }
             })
         })
+
+        // 日付と時間をJSTに変換
+		function toJST(date) {
+			const year = date.getFullYear()
+			const month = ("00" + (date.getMonth() + 1)).slice(-2)
+			const day = ("00" + date.getDate()).slice(-2)
+			const hour = ("00" + date.getHours()).slice(-2)
+			const minute = ("00" + date.getMinutes()).slice(-2)
+			return `${year}-${month}-${day}T${hour}:${minute}`
+		}
     </script>
     <style>
         /* サイドパネルとカレンダーのスタイルを設定 */
