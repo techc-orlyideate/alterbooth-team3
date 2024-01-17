@@ -14,6 +14,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			const calendarEl = document.getElementById('calendar')
 			const calendar = new FullCalendar.Calendar(calendarEl, {
+				aspectRatio: 1,
 				headerToolbar: {
 					left: 'title',
 					center: '',
@@ -93,6 +94,16 @@
 			})
 			calendar.render()
 
+			// リストカレンダーを作成
+			const listEl = document.getElementById('list')
+			const list = new FullCalendar.Calendar(listEl, {
+				initialView: 'listMonth', // リストビューを初期ビューに設定
+				locale: "ja",
+				events: '../../database/disCalen.php', // イベントのソースを指定
+				headerToolbar: false
+			})
+			list.render()
+
 			// モーダルで保存ボタンが押されたときの処理
 			document.getElementById('saveEvent').addEventListener('click', function() {
 				const title = document.getElementById('title').value
@@ -140,7 +151,8 @@
 </head>
 <body>
 	<h1>スケジュール</h1>
-	<div id='calendar'></div>
+	<div id='calendar'></div><br>
+	<div id="list"></div>
 
 	<div class="modal" tabindex="-1" id="eventModal">
 		<div class="modal-dialog">
