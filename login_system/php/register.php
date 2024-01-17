@@ -1,7 +1,7 @@
 <?php
 if(isset($_POST["register"])) {
-    $employee_name = $_POST["employee_name"];
-    $employee_mail = $_POST["employee_mail"];
+    $name = $_POST["name"];
+    $email = $_POST["email"];
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
     $dsn = "mysql:host=localhost;dbname=attendance_tool";
@@ -12,18 +12,18 @@ if(isset($_POST["register"])) {
         $dbh = new PDO($dsn, $user, $pass);
 
         // ユーザー名が既に存在するかどうかを確認
-        $sql = "SELECT * FROM employees WHERE employee_mail = :employee_mail";
+        $sql = "SELECT * FROM users WHERE email = :email";
         $stmt = $dbh->prepare($sql);
-        $stmt->execute(['employee_mail' => $employee_mail]);
+        $stmt->execute(['email' => $email]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($user) {
             echo "<h1>このメールアドレスは既に使用されています。</h1><br>";
         } else {
-            $sql = "INSERT INTO employees (employee_name, employee_mail, password) VALUES (:employee_name, :employee_mail, :password)";
+            $sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
             $stmt = $dbh->prepare($sql);
 
-            $params = array(':employee_name' => $employee_name, ':employee_mail' => $employee_mail, ':password' => $password);
+            $params = array(':username' => $name, ':email' => $email, ':password' => $password);
 
             $stmt->execute($params);
 
