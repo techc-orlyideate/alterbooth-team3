@@ -74,10 +74,11 @@ try {
     $pdo->exec('
         CREATE TABLE IF NOT EXISTS events (
             event_id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT,
+            FOREIGN KEY (user_id) REFERENCES users (user_id),
             title VARCHAR(255) NOT NULL,
             start DATETIME NOT NULL,
             end DATETIME,
-            all_day BOOLEAN DEFAULT FALSE,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         )

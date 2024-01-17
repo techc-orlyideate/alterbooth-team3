@@ -29,7 +29,7 @@ if(isset($_POST["login"])) {
         // ユーザーが存在し、パスワードが一致するかどうかを確認
         if($user && password_verify($password, $user["password"])) {
             // ユーザー名をセッションに保存
-            $_SESSION["id"] = $user["user_id"];
+            $_SESSION["user_id"] = $user["user_id"];
             // ログイン成功ページにリダイレクト
             header("Location: http://localhost/alterbooth-team3/attendance_tool/calendar/fullcalendar.html");
             exit;
