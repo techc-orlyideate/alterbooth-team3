@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザー登録</title>
+</head>
+<body>
+    <h1>ユーザー登録</h1>
+    <form action="../php/register.php" method="post">
+        <label for="name">名前:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="email">メールアドレス:</label><br>
+        <input type="text" id="email" name="email" required><br>
+        <label for="password">パスワード:</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" name="register" value="登録">
+    </form>
+</body>
+</html>
