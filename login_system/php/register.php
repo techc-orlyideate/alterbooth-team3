@@ -1,15 +1,21 @@
 <?php
+
+require '../../vendor/autoload.php';
+// .envを使用する
+Dotenv\Dotenv::createImmutable(__DIR__ . "/../..")->load();
+
 if(isset($_POST["register"])) {
     $name = $_POST["name"];
     $email = $_POST["email"];
     $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
 
-    $dsn = "mysql:host=localhost;dbname=attendance_tool";
-    $user = "root";
-    $pass = "";
+    $host=$_ENV['HOST'];
+    $db = $_ENV["DB"];
+    $user = $_ENV["USER"];
+    $pass = $_ENV["PASS"];
 
     try {
-        $dbh = new PDO($dsn, $user, $pass);
+        $dbh = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
 
         // ユーザー名が既に存在するかどうかを確認
         $sql = "SELECT * FROM users WHERE email = :email";

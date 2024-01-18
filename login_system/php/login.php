@@ -2,6 +2,10 @@
 // セッションを開始
 session_start();
 
+require '../../vendor/autoload.php';
+// .envを使用する
+Dotenv\Dotenv::createImmutable(__DIR__ . "/../..")->load();
+
 // ログインボタンが押されたかどうかを確認
 if(isset($_POST["login"])) {
     // ユーザーが入力したユーザー名とパスワードを取得
@@ -9,13 +13,14 @@ if(isset($_POST["login"])) {
     $password = $_POST["password"];
 
     // データベースへの接続情報を設定
-    $dsn = "mysql:host=localhost;dbname=attendance_tool";
-    $user = "root";
-    $pass = "";
+    $host = $_ENV["HOST"];
+    $db = $_ENV["DB"]; // データベース名を指定
+    $user = $_ENV["USER"];
+    $pass = $_ENV["PASS"];
 
     try {
         // PDOを使用してデータベースに接続
-        $dbh = new PDO($dsn, $user, $pass);
+        $dbh = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
 
         // ユーザー名に一致するユーザーを検索するSQLを準備
         $sql = "SELECT user_id, email, password FROM users WHERE email = :email";

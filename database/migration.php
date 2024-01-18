@@ -10,7 +10,7 @@ $dotenv->load();
 $host = $_ENV["HOST"];
 $db = $_ENV["DB"];
 $user = $_ENV["USER"];
-$pass = '';
+$pass = $_ENV["PASS"];
 
 try {
     // データベースに接続

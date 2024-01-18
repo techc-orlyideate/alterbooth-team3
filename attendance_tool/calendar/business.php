@@ -10,7 +10,7 @@ $dotenv->load();
 $host = $_ENV["HOST"];
 $db = $_ENV["DB"];
 $user = $_ENV["USER"];
-$pass = '';
+$pass = $_ENV["PASS"];
 $charset = 'utf8mb4';
 
 // PDOインスタンスを作成

@@ -8,7 +8,7 @@ Dotenv\Dotenv::createImmutable(__DIR__)->load();
 $host = $_ENV["HOST"];
 $db = $_ENV["DB"]; // データベース名を指定
 $user = $_ENV["USER"];
-$pass = '';
+$pass = $_ENV["PASS"];
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
